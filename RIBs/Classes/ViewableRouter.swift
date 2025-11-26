@@ -33,7 +33,8 @@ public protocol ViewableRouting: Routing {
 /// A `Router` acts on inputs from its corresponding interactor, to manipulate application state and view state,
 /// forming a tree of routers that drives the tree of view controllers. Router drives the lifecycle of its owned
 /// interactor. `Router`s should always use helper builders to instantiate children `Router`s.
-open class ViewableRouter<InteractorType, ViewControllerType>: Router<InteractorType>, ViewableRouting {
+@MainActor
+open class ViewableRouter<InteractorType, ViewControllerType>: Router<InteractorType>, @MainActor ViewableRouting {
 
     /// The corresponding `ViewController` owned by this `Router`.
     public let viewController: ViewControllerType
@@ -89,7 +90,7 @@ open class ViewableRouter<InteractorType, ViewControllerType>: Router<Interactor
         _ = deinitDisposable.insert(disposable)
     }
 
-    deinit {
+    isolated deinit {
         LeakDetector.instance.expectDeallocate(object: viewControllable.uiviewController, inTime: LeakDefaultExpectationTime.viewDisappear)
     }
 }

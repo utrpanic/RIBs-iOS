@@ -73,7 +73,8 @@ public protocol Routing: RouterScope {
 /// Router drives the lifecycle of its owned `Interactor`.
 ///
 /// Routers should always use helper builders to instantiate children routers.
-open class Router<InteractorType>: Routing {
+@MainActor
+open class Router<InteractorType>: @MainActor Routing {
 
     /// The corresponding `Interactor` owned by this `Router`.
     public let interactor: InteractorType
@@ -211,7 +212,7 @@ open class Router<InteractorType>: Routing {
         }
     }
 
-    deinit {
+    isolated deinit {
         interactable.deactivate()
 
         if !children.isEmpty {

@@ -64,7 +64,8 @@ public protocol Interactable: InteractorScope {
 /// active.
 ///
 /// An `Interactor` should only perform its business logic when it's currently active.
-open class Interactor: Interactable {
+@MainActor
+open class Interactor: @MainActor Interactable {
 
     /// Indicates if the interactor is active.
     public final var isActive: Bool {
@@ -139,7 +140,7 @@ open class Interactor: Interactable {
     private let isActiveSubject = BehaviorSubject<Bool>(value: false)
     fileprivate var activenessDisposable: CompositeDisposable?
 
-    deinit {
+    isolated deinit {
         if isActive {
             deactivate()
         }
@@ -163,6 +164,7 @@ public extension ObservableType {
     /// - parameter interactorScope: The interactor scope whose activeness this observable is confined to.
     /// - returns: The `Observable` confined to this interactor's activeness lifecycle.
 
+    @MainActor
     func confineTo(_ interactorScope: InteractorScope) -> Observable<Element> {
         return Observable
             .combineLatest(interactorScope.isActiveStream, self) { isActive, value in
@@ -195,6 +197,7 @@ public extension Disposable {
     ///
     /// - parameter interactor: The interactor to dispose the subscription based on.
     @discardableResult
+    @MainActor
     func disposeOnDeactivate(interactor: Interactor) -> Disposable {
         if let activenessDisposable = interactor.activenessDisposable {
             _ = activenessDisposable.insert(self)

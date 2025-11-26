@@ -17,22 +17,11 @@
 @testable import RIBs
 import XCTest
 
+@MainActor
 final class LaunchRouterTests: XCTestCase {
-
-    private var launchRouter: LaunchRouting!
-
-    private var interactor: InteractableMock!
-    private var viewController: ViewControllableMock!
-
-    // MARK: - Setup
-
-    override func setUp() {
-        super.setUp()
-
-        interactor = InteractableMock()
-        viewController = ViewControllableMock()
-        launchRouter = LaunchRouter(interactor: interactor, viewController: viewController)
-    }
+    private var interactor: InteractableMock! = InteractableMock()
+    private var viewController: ViewControllableMock! = ViewControllableMock()
+    private lazy var launchRouter: LaunchRouting! = LaunchRouter(interactor: interactor, viewController: viewController)
 
     // MARK: - Tests
 

@@ -54,7 +54,7 @@ public protocol LeakDetectionHandle {
 public class LeakDetector {
 
     /// The singleton instance.
-    public static private(set) var instance = LeakDetector()
+    nonisolated(unsafe) public static private(set) var instance = LeakDetector()
 
     // This is used internally to be able to set mock instance in unit-tests. The public API and behavior of the public static LeakDetector instance above does not change.
     static func setInstance(_ newInstance: LeakDetector) {
@@ -153,7 +153,7 @@ public class LeakDetector {
     // MARK: - Internal Interface
 
     // Test override for leak detectors.
-    static var disableLeakDetectorOverride: Bool = false
+    nonisolated(unsafe) static var disableLeakDetectorOverride: Bool = false
 
     #if DEBUG
         /// Reset the state of Leak Detector, internal for UI test only.

@@ -20,6 +20,7 @@ import Foundation
 public protocol Buildable: AnyObject {}
 
 /// Utility that instantiates a RIB and sets up its internal wirings.
+@MainActor
 open class Builder<DependencyType>: Buildable {
 
     /// The dependency used for this builder to build the RIB.

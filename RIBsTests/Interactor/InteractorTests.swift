@@ -9,6 +9,7 @@
 import XCTest
 import RxSwift
 
+@MainActor
 final class InteractorTests: XCTestCase {
     
     private var interactor: InteractorMock!
@@ -87,7 +88,7 @@ final class InteractorTests: XCTestCase {
         XCTAssertEqual(interactor.willResignActiveCallCount, 1)
     }
     
-    func test_isActiveStream_completedOnInteractorDeinit() {
+    func test_isActiveStream_completedOnInteractorDeinit() async {
         // given
         var isActiveStreamCompleted = false
         interactor.activate()
@@ -131,7 +132,7 @@ final class InteractorTests: XCTestCase {
         XCTAssertTrue(onDisposeCalled)
     }
     
-    func test_observableIsDisposedOnInteractorDeinit() {
+    func test_observableIsDisposedOnInteractorDeinit() async {
         // given
         var onDisposeCalled = false
         let subjectEmiitingValues: PublishSubject<Int> = .init()
